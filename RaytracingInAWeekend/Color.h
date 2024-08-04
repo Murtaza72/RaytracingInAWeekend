@@ -1,12 +1,12 @@
 #pragma once
 
-#include "Vec3.h"
-
 #include <iostream>
+
+#include "Vec3.h"
 
 using Color = Vec3;
 
-void WriteColor(std::ostream& out, const Color& pixelColor)
+inline void WriteColor(std::ostream& out, const Color& pixelColor)
 {
 	auto r = pixelColor.x();
 	auto g = pixelColor.y();
