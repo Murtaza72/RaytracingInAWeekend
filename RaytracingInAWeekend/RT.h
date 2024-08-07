@@ -4,11 +4,22 @@
 #include <iostream>
 #include <limits>
 #include <memory>
+#include <cstdlib>
 
 using std::make_shared;
 using std::shared_ptr;
 using std::sqrt;
 
+
+inline double Random()
+{
+	return rand() / (RAND_MAX + 1.0);
+}
+
+inline double Random(double min, double max)
+{
+	return min + (max - min) * Random();
+}
 
 // Constants
 const double infinity = std::numeric_limits<double>::infinity();

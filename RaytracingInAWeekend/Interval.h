@@ -31,6 +31,13 @@ public:
 	{
 		return min < x && x < max;
 	}
+
+	double Clamp(double x)
+	{
+		if (x < min) return min;
+		if (x > max) return max;
+		return x;
+	}
 };
 
 const Interval empty = Interval(+infinity, -infinity);

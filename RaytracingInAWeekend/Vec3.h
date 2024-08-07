@@ -3,6 +3,8 @@
 #include <cmath>
 #include <iostream>
 
+#include "RT.h"
+
 class Vec3
 {
 public:
@@ -59,6 +61,16 @@ public:
 	double LengthSquared() const
 	{
 		return (m_elements[0] * m_elements[0] + m_elements[1] * m_elements[1] + m_elements[2] * m_elements[2]);
+	}
+
+	static Vec3 RandomVec()
+	{
+		return Vec3(Random(), Random(), Random());
+	}
+
+	static Vec3 RandomVec(int min, int max)
+	{
+		return Vec3(Random(min, max), Random(min, max), Random(min, max));
 	}
 
 private:
@@ -120,4 +132,24 @@ inline Vec3 cross(const Vec3& u, const Vec3& v)
 inline Vec3 UnitVector(const Vec3& v)
 {
 	return v / v.Length();
+}
+
+inline Vec3 RandomVectorInUnitSphere()
+{
+	while (true)
+	{
+		Vec3 vec = Vec3::RandomVec(-1, 1);
+		if (vec.LengthSquared() < 1)
+			return vec;
+	}
+}
+
+inline Vec3 RandomVecOnHemispher(const Vec3& normal)
+{
+	Vec3 randVec = UnitVector(RandomVectorInUnitSphere());
+
+	if (dot(randVec, normal) < 0.0) // not in same direction
+		return -randVec;
+
+	return randVec;
 }

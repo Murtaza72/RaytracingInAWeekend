@@ -1,11 +1,11 @@
 #include <iostream>
 
-#include "Ray.h"
-#include "Vec3.h"
-#include "Sphere.h"
+#include "Camera.h"
 #include "Hittable.h"
 #include "HittableList.h"
-#include "Camera.h"
+#include "Ray.h"
+#include "Sphere.h"
+#include "Vec3.h"
 
 int main()
 {
@@ -17,7 +17,9 @@ int main()
 	Camera cam;
 
 	cam.aspectRatio = 16.0 / 9.0;
-	cam.imageWidth = 19200;
+	cam.imageWidth = 2000;
+	cam.samplePerPixel = 10;
+	cam.maxDepth = 32;
 
 	cam.Render(world);
 

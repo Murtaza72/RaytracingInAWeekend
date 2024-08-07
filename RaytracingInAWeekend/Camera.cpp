@@ -1,11 +1,17 @@
 #include "Camera.h"
 
-Color Camera::RayColor(const Ray& r, HittableList& world)
+Color Camera::RayColor(const Ray& r, int depth, HittableList& world)
 {
 	HitRecord record;
-	if (world.Hit(r, Interval(0, infinity), record))
+
+	// return if max depth is reached
+	if (depth <= 0)
+		return Color(0.0, 0.0, 0.0);
+
+	if (world.Hit(r, Interval(0.001, infinity), record))
 	{
-		return 0.5 * (record.normal + Color(1, 1, 1));
+		Vec3 direction = record.normal + RandomVecOnHemispher(record.normal);
+		return 0.5 * RayColor(Ray(record.point, direction), depth - 1, world);
 	}
 
 	Vec3 unitDirection = UnitVector(r.Direction());
@@ -18,6 +24,8 @@ void Camera::Initialize()
 	// Calculate the image height, and ensure that it's at least 1.
 	m_imageHeight = int(imageWidth / aspectRatio);
 	m_imageHeight = (m_imageHeight < 1) ? 1 : m_imageHeight;
+
+	m_pixelSampleScale = 1.0 / samplePerPixel;
 
 	// Camera
 	double focalLength = 1.0;
@@ -47,14 +55,33 @@ void Camera::Render(HittableList& world)
 
 		for (int i = 0; i < imageWidth; i++)
 		{
-			auto pixelCenter = m_pixel00Location + (i * m_pixelDeltaU) + (j * m_pixelDeltaV);
-			auto rayDirection = pixelCenter - m_cameraCenter;
-			Ray r(m_cameraCenter, rayDirection);
-			Color pixelColor = RayColor(r, world);
+			Color pixelColor(0.0, 0.0, 0.0);
+			for (int sample = 0; sample < samplePerPixel; sample++)
+			{
+				Ray ray = GetRay(i, j);
+				pixelColor += RayColor(ray, maxDepth, world);
+			}
 
-			WriteColor(std::cout, pixelColor);
+			WriteColor(std::cout, m_pixelSampleScale * pixelColor);
 		}
 	}
 
 	std::clog << "\rDone" << std::endl;
+}
+
+Ray Camera::GetRay(int i, int j)
+{
+	Vec3 offset = RandomSample();
+	auto pixelSample = m_pixel00Location
+		+ ((i + offset.x()) * m_pixelDeltaU)
+		+ ((j + offset.y()) * m_pixelDeltaV);
+
+	auto rayDirection = pixelSample - m_cameraCenter;
+
+	return Ray(m_cameraCenter, rayDirection);
+}
+
+Vec3 Camera::RandomSample()
+{
+	return Vec3(Random() - 0.5, Random() + 0.5, 0.0);
 }

@@ -1,14 +1,14 @@
 #pragma once
 
-#include "Ray.h"
 #include "Interval.h"
+#include "Ray.h"
 
 class HitRecord
 {
 public:
 	Point3 point;
 	Vec3 normal;
-	double t;
+	double t;	// scalar along the direction of ray
 	bool frontFace;
 
 	void SetFrontFace(const Ray& ray, const Vec3& outwardNormal)
