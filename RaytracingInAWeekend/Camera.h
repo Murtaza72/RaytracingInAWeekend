@@ -19,13 +19,12 @@ private:
 	Ray GetRay(int i, int j);
 	Vec3 RandomSample();
 
-
 	void Initialize();
 
-	int m_imageHeight;
-	Point3 m_cameraCenter;
-	Vec3 m_pixelDeltaU;
-	Vec3 m_pixelDeltaV;
-	Point3 m_pixel00Location;
-	double m_pixelSampleScale;
+	int m_ImageHeight;
+	Point3 m_CameraCenter;
+	Vec3 m_PixelDeltaU;
+	Vec3 m_PixelDeltaV;
+	Point3 m_Pixel00Location;
+	double m_PixelSampleScale;
 };

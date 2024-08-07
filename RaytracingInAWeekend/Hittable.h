@@ -3,6 +3,8 @@
 #include "Interval.h"
 #include "Ray.h"
 
+class Material;
+
 class HitRecord
 {
 public:
@@ -10,6 +12,7 @@ public:
 	Vec3 normal;
 	double t;	// scalar along the direction of ray
 	bool frontFace;
+	shared_ptr<Material> material;
 
 	void SetFrontFace(const Ray& ray, const Vec3& outwardNormal)
 	{

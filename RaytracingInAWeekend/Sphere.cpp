@@ -28,6 +28,7 @@ bool Sphere::Hit(const Ray& ray, Interval rayT, HitRecord& record)
 	record.normal = (record.point - m_Center) / m_Radius;
 	Vec3 outwardNormal = (record.point - originToCenter) / m_Radius;
 	record.SetFrontFace(ray, outwardNormal);
+	record.material = m_Material;
 
 	return true;
 }

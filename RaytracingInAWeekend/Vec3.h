@@ -73,6 +73,12 @@ public:
 		return Vec3(Random(min, max), Random(min, max), Random(min, max));
 	}
 
+	bool NearZero() const
+	{
+		auto small = 1e-8;
+		return  (fabs(m_elements[0]) < small && fabs(m_elements[1]) < small && fabs(m_elements[2]) < small);
+	}
+
 private:
 	double m_elements[3];
 
@@ -144,12 +150,22 @@ inline Vec3 RandomVectorInUnitSphere()
 	}
 }
 
+inline Vec3 RandomUnitVector()
+{
+	return UnitVector(RandomVectorInUnitSphere());
+}
+
 inline Vec3 RandomVecOnHemispher(const Vec3& normal)
 {
-	Vec3 randVec = UnitVector(RandomVectorInUnitSphere());
+	Vec3 randVec = RandomUnitVector();
 
 	if (dot(randVec, normal) < 0.0) // not in same direction
 		return -randVec;
 
 	return randVec;
+}
+
+inline Vec3 Reflect(const Vec3 v, const Vec3 n)
+{
+	return v - 2 * dot(n, v) * n;
 }
