@@ -169,3 +169,11 @@ inline Vec3 Reflect(const Vec3 v, const Vec3 n)
 {
 	return v - 2 * dot(n, v) * n;
 }
+
+inline Vec3 Refract(const Vec3& unitVec, const Vec3& n, double etaOverEtaPrime)
+{
+	double cosTheta = std::fmin(dot(-unitVec, n), 1.0);
+	Vec3 rPerpendicular = etaOverEtaPrime * (unitVec + cosTheta * n);
+	Vec3 rParallel = -std::sqrt(std::fabs(1.0 - rPerpendicular.LengthSquared())) * n;
+	return (rPerpendicular + rParallel);
+}

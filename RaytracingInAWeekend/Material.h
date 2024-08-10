@@ -11,7 +11,7 @@ class HitRecord;
 class Material
 {
 public:
-	Material() = default;
+	virtual ~Material() = default;
 
 	virtual bool Scattter(const Ray& ray, const HitRecord& rec, Color& attenuation, Ray& scattered) const
 	{
@@ -67,4 +67,54 @@ public:
 private:
 	Color m_Albedo;
 	double m_Fuzz;
+};
+
+class Dielectric : public Material
+{
+public:
+
+	Dielectric(double refractiveIndex)
+		: m_RefractiveIndex(refractiveIndex)
+	{
+	}
+
+	bool Scattter(const Ray& ray, const HitRecord& rec, Color& attenuation, Ray& scattered) const override
+	{
+		attenuation = Color(1.0, 1.0, 1.0);
+
+		double ri = rec.frontFace ? (1.0 / m_RefractiveIndex) : m_RefractiveIndex;
+
+		Vec3 unitVec = UnitVector(ray.Direction());
+		double cosTheta = fmin(dot(-unitVec, rec.normal), 1.0);
+		double sinTheta = sqrt(1.0 - (cosTheta * cosTheta));
+
+		#if 0
+		bool cannotRefract = ri * sinTheta > 1.0;
+		Vec3 direction;
+
+		if (cannotRefract || Reflectance(cosTheta, ri) > Random())
+		{
+			direction = Reflect(unitVec, rec.normal);
+		}
+		else
+		{
+			direction = Refract(unitVec, rec.normal, ri);
+		}
+		#endif
+
+		Vec3 direction = Refract(unitVec, rec.normal, ri);
+		scattered = Ray(rec.point, direction);
+
+		return true;
+	}
+
+private:
+	double m_RefractiveIndex;
+
+	static double Reflectance(double cosine, double refractIndex)
+	{
+		auto r0 = (1 - refractIndex) / (1 + refractIndex);
+		r0 = r0 * r0;
+		return r0 + (1 - r0) * std::pow((1 - cosine), 5);
+	}
 };

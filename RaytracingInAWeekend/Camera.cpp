@@ -9,7 +9,7 @@ Color Camera::RayColor(const Ray& ray, int depth, HittableList& world)
 	if (depth <= 0)
 		return Color(0.0, 0.0, 0.0);
 
-	if (world.Hit(ray, Interval(0.001, infinity), record))
+	if (world.Hit(ray, Interval(0.000001, infinity), record))
 	{
 		Ray scattered;
 		Color attenuation;
