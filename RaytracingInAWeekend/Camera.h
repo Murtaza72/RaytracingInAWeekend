@@ -14,6 +14,11 @@ public:
 	int samplePerPixel = 100;
 	int maxDepth = 32;
 
+	int vertFieldOfView = 45;
+	Point3 lookFrom = Point3(0, 0, 0);
+	Point3 lookAt = Point3(0, 0, -1);
+	Vec3 viewUp = Vec3(0, 1, 0);
+
 private:
 	Color RayColor(const Ray& r, int depth, HittableList& world);
 	Ray GetRay(int i, int j);
@@ -27,4 +32,5 @@ private:
 	Vec3 m_PixelDeltaV;
 	Point3 m_Pixel00Location;
 	double m_PixelSampleScale;
+	Vec3 u, v, w;
 };

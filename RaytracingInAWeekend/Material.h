@@ -82,27 +82,24 @@ public:
 	{
 		attenuation = Color(1.0, 1.0, 1.0);
 
-		double ri = rec.frontFace ? (1.0 / m_RefractiveIndex) : m_RefractiveIndex;
+		double modifiedRI = rec.frontFace ? (1.0 / m_RefractiveIndex) : m_RefractiveIndex;
 
 		Vec3 unitVec = UnitVector(ray.Direction());
 		double cosTheta = fmin(dot(-unitVec, rec.normal), 1.0);
 		double sinTheta = sqrt(1.0 - (cosTheta * cosTheta));
 
-		#if 0
-		bool cannotRefract = ri * sinTheta > 1.0;
+		bool cannotRefract = modifiedRI * sinTheta > 1.0;
 		Vec3 direction;
 
-		if (cannotRefract || Reflectance(cosTheta, ri) > Random())
+		if (cannotRefract || Reflectance(cosTheta, modifiedRI) > Random())
 		{
 			direction = Reflect(unitVec, rec.normal);
 		}
 		else
 		{
-			direction = Refract(unitVec, rec.normal, ri);
+			direction = Refract(unitVec, rec.normal, modifiedRI);
 		}
-		#endif
 
-		Vec3 direction = Refract(unitVec, rec.normal, ri);
 		scattered = Ray(rec.point, direction);
 
 		return true;

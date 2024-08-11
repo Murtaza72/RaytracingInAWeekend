@@ -32,19 +32,27 @@ void Camera::Initialize()
 
 	m_PixelSampleScale = 1.0 / samplePerPixel;
 
-	// Camera
-	double focalLength = 1.0;
-	double viewportHeight = 2.0;
+	// Viewport dimensions
+	double focalLength = (lookFrom - lookAt).Length();
+	double theta = DegreesToRadians(vertFieldOfView);
+	double h = tan(theta / 2);
+	double viewportHeight = 2 * h * focalLength;
 	double viewportWidth = viewportHeight * (double(imageWidth) / m_ImageHeight);
-	m_CameraCenter = Point3(0, 0, 0);
 
-	Vec3 viewportU = Vec3(viewportWidth, 0, 0);
-	Vec3 viewportV = Vec3(0, -viewportHeight, 0);
+	m_CameraCenter = lookFrom;
+
+	// unit basis vector
+	w = UnitVector(lookFrom - lookAt);
+	u = UnitVector(cross(viewUp, w));
+	v = cross(w, u);
+
+	Vec3 viewportU = viewportWidth * u;
+	Vec3 viewportV = viewportHeight * -v;
 
 	m_PixelDeltaU = viewportU / imageWidth;
 	m_PixelDeltaV = viewportV / m_ImageHeight;
 
-	auto viewportUpperLeft = m_CameraCenter - Vec3(0, 0, focalLength) - viewportU / 2 - viewportV / 2;
+	Vec3 viewportUpperLeft = m_CameraCenter - (focalLength * w) - viewportU / 2 - viewportV / 2;
 	m_Pixel00Location = viewportUpperLeft + 0.5 * (m_PixelDeltaU + m_PixelDeltaV);
 }
 
