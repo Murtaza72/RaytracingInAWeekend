@@ -23,7 +23,7 @@ public:
 
 	Vec3 operator-() const
 	{
-		return Vec3(-m_elements[0], -m_elements[2], -m_elements[2]);
+		return Vec3(-m_elements[0], -m_elements[1], -m_elements[2]);
 	}
 
 	double operator[](int i) const { return m_elements[i]; }
