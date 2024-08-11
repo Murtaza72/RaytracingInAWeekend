@@ -15,6 +15,16 @@ inline double LinearToGamma(double color)
 	return sqrt(color);
 }
 
+static inline Color RandomColor()
+{
+	return Color(Random(0.0, 1.0), Random(0.0, 1.0), Random(0.0, 1.0));
+}
+
+static inline Color RandomColor(int min, int max)
+{
+	return Color(Random(min, max), Random(min, max), Random(min, max));
+}
+
 inline void WriteColor(std::ostream& out, const Color& pixelColor)
 {
 	auto r = pixelColor.x();
