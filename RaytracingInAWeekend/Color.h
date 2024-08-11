@@ -1,7 +1,6 @@
 #pragma once
 
-#include <iostream>
-
+#include "RT.h"
 #include "Interval.h"
 #include "Vec3.h"
 

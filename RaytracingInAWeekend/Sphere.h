@@ -10,7 +10,7 @@ public:
 	{
 	}
 
-	bool Hit(const Ray& ray, Interval rayT, HitRecord& record) override;
+	bool Hit(const Ray& ray, const Interval rayT, HitRecord& record) const override;
 
 private:
 	Point3 m_Center;

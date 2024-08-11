@@ -1,50 +1,47 @@
 #pragma once
 
-#include <cmath>
-#include <iostream>
-
 #include "RT.h"
 
 class Vec3
 {
 public:
-	Vec3() : m_elements{ 0.0, 0.0, 0.0 }
+	Vec3() : m_Elements{ 0.0, 0.0, 0.0 }
 	{
 	}
 
 	Vec3(double e0, double e1, double e2)
-		: m_elements{ e0, e1, e2 }
+		: m_Elements{ e0, e1, e2 }
 	{
 	}
 
-	double x() const { return m_elements[0]; }
-	double y() const { return m_elements[1]; }
-	double z() const { return m_elements[2]; }
+	double x() const { return m_Elements[0]; }
+	double y() const { return m_Elements[1]; }
+	double z() const { return m_Elements[2]; }
 
 	Vec3 operator-() const
 	{
-		return Vec3(-m_elements[0], -m_elements[1], -m_elements[2]);
+		return Vec3(-m_Elements[0], -m_Elements[1], -m_Elements[2]);
 	}
 
-	double operator[](int i) const { return m_elements[i]; }
+	double operator[](int i) const { return m_Elements[i]; }
 	double& operator[](int i)
 	{
-		return m_elements[i];
+		return m_Elements[i];
 	}
 
 	Vec3& operator+= (const Vec3& v)
 	{
-		m_elements[0] += v.x();
-		m_elements[1] += v.y();
-		m_elements[2] += v.z();
+		m_Elements[0] += v.x();
+		m_Elements[1] += v.y();
+		m_Elements[2] += v.z();
 		return *this;
 	}
 
 	Vec3& operator*= (double m)
 	{
-		m_elements[0] *= m;
-		m_elements[1] *= m;
-		m_elements[2] *= m;
+		m_Elements[0] *= m;
+		m_Elements[1] *= m;
+		m_Elements[2] *= m;
 		return *this;
 	}
 
@@ -60,7 +57,7 @@ public:
 
 	double LengthSquared() const
 	{
-		return (m_elements[0] * m_elements[0] + m_elements[1] * m_elements[1] + m_elements[2] * m_elements[2]);
+		return (m_Elements[0] * m_Elements[0] + m_Elements[1] * m_Elements[1] + m_Elements[2] * m_Elements[2]);
 	}
 
 	static Vec3 RandomVec()
@@ -76,11 +73,11 @@ public:
 	bool NearZero() const
 	{
 		auto small = 1e-8;
-		return  (fabs(m_elements[0]) < small && fabs(m_elements[1]) < small && fabs(m_elements[2]) < small);
+		return  (fabs(m_Elements[0]) < small && fabs(m_Elements[1]) < small && fabs(m_Elements[2]) < small);
 	}
 
 private:
-	double m_elements[3];
+	double m_Elements[3];
 
 };
 

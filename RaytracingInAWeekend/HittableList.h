@@ -2,10 +2,9 @@
 
 #include <vector>
 
-#include "Hittable.h"
+#include "RT.h"
 
-using std::shared_ptr;
-using std::make_shared;
+#include "Hittable.h"
 
 class HittableList : public Hittable
 {
@@ -17,7 +16,7 @@ public:
 		objects.push_back(obj);
 	}
 
-	bool Hit(const Ray& ray, Interval rayT, HitRecord& record) override
+	bool Hit(const Ray& ray, Interval rayT, HitRecord& record) const override
 	{
 		HitRecord rec;
 		bool hitAny = false;

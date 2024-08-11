@@ -17,7 +17,7 @@ public:
 	{
 	}
 
-	double Size()
+	double Size() const
 	{
 		return max - min;
 	}
@@ -27,12 +27,12 @@ public:
 		return min <= x && x <= max;
 	}
 
-	bool Surrounds(double x)
+	bool Surrounds(double x) const
 	{
 		return min < x && x < max;
 	}
 
-	double Clamp(double x)
+	double Clamp(double x) const
 	{
 		if (x < min) return min;
 		if (x > max) return max;

@@ -1,7 +1,6 @@
 #pragma once
 
 #include "RT.h"
-
 #include "Color.h"
 #include "Ray.h"
 #include "Hittable.h"
@@ -27,6 +26,7 @@ public:
 
 	bool Scattter(const Ray& ray, const HitRecord& rec, Color& attenuation, Ray& scattered) const override
 	{
+		// Lambertian material scatter more towards the normal
 		Vec3 direction = rec.normal + RandomUnitVector();
 
 		// if normal and random were complete opposite
@@ -88,6 +88,7 @@ public:
 		double cosTheta = fmin(dot(-unitVec, rec.normal), 1.0);
 		double sinTheta = sqrt(1.0 - (cosTheta * cosTheta));
 
+		// if angle > 90deg: reflect
 		bool cannotRefract = modifiedRI * sinTheta > 1.0;
 		Vec3 direction;
 
@@ -110,6 +111,7 @@ private:
 
 	static double Reflectance(double cosine, double refractIndex)
 	{
+		// Schlick Approximation for Total Internal Reflection
 		auto r0 = (1 - refractIndex) / (1 + refractIndex);
 		r0 = r0 * r0;
 		return r0 + (1 - r0) * std::pow((1 - cosine), 5);

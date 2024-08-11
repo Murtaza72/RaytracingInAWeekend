@@ -1,6 +1,6 @@
 #include "Sphere.h"
 
-bool Sphere::Hit(const Ray& ray, Interval rayT, HitRecord& record)
+bool Sphere::Hit(const Ray& ray, const Interval rayT, HitRecord& record) const
 {
 	Vec3 originToCenter = m_Center - ray.Origin();
 	double a = ray.Direction().LengthSquared();

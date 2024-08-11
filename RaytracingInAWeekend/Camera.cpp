@@ -1,7 +1,7 @@
 #include "Camera.h"
 #include "Material.h"
 
-Color Camera::RayColor(const Ray& ray, int depth, HittableList& world)
+Color Camera::RayColor(const Ray& ray, int depth, HittableList& world) const
 {
 	HitRecord record;
 
@@ -9,6 +9,7 @@ Color Camera::RayColor(const Ray& ray, int depth, HittableList& world)
 	if (depth <= 0)
 		return Color(0.0, 0.0, 0.0);
 
+	// Interval min !=0 to avoid shadow acne
 	if (world.Hit(ray, Interval(0.000001, infinity), record))
 	{
 		Ray scattered;
@@ -19,6 +20,7 @@ Color Camera::RayColor(const Ray& ray, int depth, HittableList& world)
 		return Color(0.0, 0.0, 0.0);
 	}
 
+	// Background gradient
 	Vec3 unitDirection = UnitVector(ray.Direction());
 	auto a = 0.5 * (unitDirection.y() + 1.0);
 	return (1.0 - a) * Color(1.0, 1.0, 1.0) + a * Color(0.5, 0.7, 1.0);
@@ -85,8 +87,9 @@ void Camera::Render(HittableList& world)
 	std::clog << "\rDone" << std::endl;
 }
 
-Ray Camera::GetRay(int i, int j)
+Ray Camera::GetRay(int i, int j) const
 {
+	// Anti-aliasing
 	Vec3 offset = RandomSample();
 	auto pixelSample = m_Pixel00Location
 		+ ((i + offset.x()) * m_PixelDeltaU)
@@ -98,12 +101,12 @@ Ray Camera::GetRay(int i, int j)
 	return Ray(rayOrigin, rayDirection);
 }
 
-Vec3 Camera::RandomSample()
+Vec3 Camera::RandomSample() const
 {
 	return Vec3(Random() - 0.5, Random() + 0.5, 0.0);
 }
 
-Vec3 Camera::RandomDefocusDiskSample()
+Vec3 Camera::RandomDefocusDiskSample() const
 {
 	Vec3 vec = RandomVectorInUnitDisk();
 

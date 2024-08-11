@@ -26,10 +26,10 @@ public:
 private:
 	void Initialize();
 
-	Color RayColor(const Ray& r, int depth, HittableList& world);
-	Ray GetRay(int i, int j);
-	Vec3 RandomSample();
-	Vec3 RandomDefocusDiskSample();
+	Color RayColor(const Ray& r, int depth, HittableList& world) const;
+	Ray GetRay(int i, int j) const;
+	Vec3 RandomSample() const;
+	Vec3 RandomDefocusDiskSample() const;
 
 private:
 	int m_ImageHeight;

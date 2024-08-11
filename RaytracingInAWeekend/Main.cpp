@@ -1,4 +1,4 @@
-#include <iostream>
+#include "RT.h"
 
 #include "Camera.h"
 #include "Hittable.h"
@@ -27,7 +27,7 @@ void SampleRender()
 	Camera cam;
 
 	cam.aspectRatio = 16.0 / 9.0;
-	cam.imageWidth = 400;
+	cam.imageWidth = 960;
 	cam.samplePerPixel = 100;
 	cam.maxDepth = 50;
 
@@ -37,7 +37,7 @@ void SampleRender()
 	cam.viewUp = Point3(0, 1, 0);
 
 	cam.defocusAngle = 10;
-	cam.focusDistance = 4.6;
+	cam.focusDistance = 3.4;
 
 	cam.Render(world);
 }
@@ -112,7 +112,7 @@ void FinalRender()
 
 int main()
 {
-	FinalRender();
+	SampleRender();
 
 	return 0;
 }
