@@ -33,10 +33,9 @@ void Camera::Initialize()
 	m_PixelSampleScale = 1.0 / samplePerPixel;
 
 	// Viewport dimensions
-	double focalLength = (lookFrom - lookAt).Length();
 	double theta = DegreesToRadians(vertFieldOfView);
 	double h = tan(theta / 2);
-	double viewportHeight = 2 * h * focalLength;
+	double viewportHeight = 2 * h * focusDistance;
 	double viewportWidth = viewportHeight * (double(imageWidth) / m_ImageHeight);
 
 	m_CameraCenter = lookFrom;
@@ -52,8 +51,12 @@ void Camera::Initialize()
 	m_PixelDeltaU = viewportU / imageWidth;
 	m_PixelDeltaV = viewportV / m_ImageHeight;
 
-	Vec3 viewportUpperLeft = m_CameraCenter - (focalLength * w) - viewportU / 2 - viewportV / 2;
+	Vec3 viewportUpperLeft = m_CameraCenter - (focusDistance * w) - viewportU / 2 - viewportV / 2;
 	m_Pixel00Location = viewportUpperLeft + 0.5 * (m_PixelDeltaU + m_PixelDeltaV);
+
+	double defocusRadius = focusDistance * tan(DegreesToRadians(defocusAngle / 2));
+	m_DefocusHorizontal = u * defocusRadius;
+	m_DefocusVertical = v * defocusRadius;
 }
 
 void Camera::Render(HittableList& world)
@@ -89,12 +92,20 @@ Ray Camera::GetRay(int i, int j)
 		+ ((i + offset.x()) * m_PixelDeltaU)
 		+ ((j + offset.y()) * m_PixelDeltaV);
 
-	auto rayDirection = pixelSample - m_CameraCenter;
+	Point3 rayOrigin = (defocusAngle <= 0) ? m_CameraCenter : RandomDefocusDiskSample();
+	auto rayDirection = pixelSample - rayOrigin;
 
-	return Ray(m_CameraCenter, rayDirection);
+	return Ray(rayOrigin, rayDirection);
 }
 
 Vec3 Camera::RandomSample()
 {
 	return Vec3(Random() - 0.5, Random() + 0.5, 0.0);
+}
+
+Vec3 Camera::RandomDefocusDiskSample()
+{
+	Vec3 vec = RandomVectorInUnitDisk();
+
+	return m_CameraCenter + (vec.x() * m_DefocusHorizontal) + (vec.y() * m_DefocusVertical);
 }

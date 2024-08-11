@@ -140,6 +140,16 @@ inline Vec3 UnitVector(const Vec3& v)
 	return v / v.Length();
 }
 
+inline Vec3 RandomVectorInUnitDisk()
+{
+	while (true)
+	{
+		Vec3 vec = Vec3(Random(-1, 1), Random(-1, 1), 0.0);
+		if (vec.LengthSquared() < 1)
+			return vec;
+	}
+}
+
 inline Vec3 RandomVectorInUnitSphere()
 {
 	while (true)
