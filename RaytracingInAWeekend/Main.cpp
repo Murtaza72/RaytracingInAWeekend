@@ -43,7 +43,7 @@ void SampleRender()
 
 	auto start = std::chrono::system_clock::now();
 
-	cam.RenderMT(world);
+	cam.Render(world);
 
 	auto end = std::chrono::system_clock::now();
 	double timeTaken = std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count();

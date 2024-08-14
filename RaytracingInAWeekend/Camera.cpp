@@ -105,22 +105,24 @@ void Camera::Render(HittableList& world)
 
 	std::cout << "P3\n" << imageWidth << " " << m_ImageHeight << "\n255\n";
 
-	for (int j = 0; j < m_ImageHeight; j++)
+	for (int y = 0; y < m_ImageHeight; y++)
 	{
-		std::clog << "\rScanlines remaining: " << (m_ImageHeight - j) << " " << std::flush;
+		std::clog << "\rScanlines remaining: " << (m_ImageHeight - y) << " " << std::flush;
 
-		for (int i = 0; i < imageWidth; i++)
+		for (int x = 0; x < imageWidth; x++)
 		{
 			Color pixelColor(0.0, 0.0, 0.0);
 			for (int sample = 0; sample < samplePerPixel; sample++)
 			{
-				Ray ray = GetRay(i, j);
+				Ray ray = GetRay(x, y);
 				pixelColor += RayColor(ray, maxDepth, world);
 			}
 
-			WriteColor(std::cout, m_PixelSampleScale * pixelColor);
+			m_ImageData[x + y * imageWidth] = m_PixelSampleScale * pixelColor;
 		}
 	}
+
+	WriteColor(std::cout, m_ImageData, imageWidth, m_ImageHeight);
 
 	std::clog << "\rDone" << std::endl;
 }
