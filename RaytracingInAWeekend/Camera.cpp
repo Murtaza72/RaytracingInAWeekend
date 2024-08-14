@@ -1,6 +1,8 @@
 #include "Camera.h"
 #include "Material.h"
 
+#include <execution>
+
 Color Camera::RayColor(const Ray& ray, int depth, HittableList& world) const
 {
 	HitRecord record;
@@ -59,6 +61,42 @@ void Camera::Initialize()
 	double defocusRadius = focusDistance * tan(DegreesToRadians(defocusAngle / 2));
 	m_DefocusHorizontal = u * defocusRadius;
 	m_DefocusVertical = v * defocusRadius;
+
+	m_ImageData = new Color[imageWidth * m_ImageHeight];
+}
+
+void Camera::RenderMT(HittableList& world)
+{
+	Initialize();
+
+	for (int i = 0; i < imageWidth; i++) m_ImageHorizontalIter.push_back(i);
+	for (int i = 0; i < m_ImageHeight; i++) m_ImageVerticalIter.push_back(i);
+
+	std::cout << "P3\n" << imageWidth << " " << m_ImageHeight << "\n255\n";
+
+	std::for_each(std::execution::par, m_ImageVerticalIter.begin(), m_ImageVerticalIter.end(),
+		[this, &world](int y) {
+
+			std::clog << "\rScanlines remaining: " << (m_ImageHeight - y) << " " << std::flush;
+
+			std::for_each(std::execution::par, m_ImageHorizontalIter.begin(), m_ImageHorizontalIter.end(),
+				[this, y, &world](int x)
+				{
+					Color pixelColor(0.0, 0.0, 0.0);
+					for (int sample = 0; sample < samplePerPixel; sample++)
+					{
+						Ray ray = GetRay(x, y);
+						pixelColor += RayColor(ray, maxDepth, world);
+					}
+
+					m_ImageData[x + y * imageWidth] = m_PixelSampleScale * pixelColor;
+
+				});
+		});
+
+	WriteColor(std::cout, m_ImageData, imageWidth, m_ImageHeight);
+
+	std::clog << "\rDone" << std::endl;
 }
 
 void Camera::Render(HittableList& world)

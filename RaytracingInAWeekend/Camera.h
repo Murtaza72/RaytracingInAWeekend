@@ -8,6 +8,7 @@ class Camera
 {
 public:
 	void Render(HittableList& world);
+	void RenderMT(HittableList& world);
 
 public:
 	int imageWidth = 1600;
@@ -40,4 +41,8 @@ private:
 	double m_PixelSampleScale;
 	Vec3 u, v, w;
 	Vec3 m_DefocusHorizontal, m_DefocusVertical;
+
+	Color* m_ImageData;
+
+	std::vector<int> m_ImageHorizontalIter, m_ImageVerticalIter;
 };

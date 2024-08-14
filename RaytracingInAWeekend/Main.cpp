@@ -8,6 +8,8 @@
 #include "Vec3.h"
 #include "Material.h"
 
+#include <chrono>
+
 void SampleRender()
 {
 	HittableList world;
@@ -39,7 +41,14 @@ void SampleRender()
 	cam.defocusAngle = 10;
 	cam.focusDistance = 3.4;
 
-	cam.Render(world);
+	auto start = std::chrono::system_clock::now();
+
+	cam.RenderMT(world);
+
+	auto end = std::chrono::system_clock::now();
+	double timeTaken = std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count();
+	std::clog << "Time taken: " << timeTaken << " ms" << std::endl;
+	std::cin.get();
 }
 
 void FinalRender()

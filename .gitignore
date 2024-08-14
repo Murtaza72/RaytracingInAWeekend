@@ -1,7 +1,7 @@
 /.vs
 /x64
 /RaytracingInAWeekend/x64
-/RaytracingInAWeekend/image.ppm
+*.ppm
 /RaytracingInAWeekend/RaytracingInAWeekend.vcxproj
 /RaytracingInAWeekend/RaytracingInAWeekend.vcxproj.filters
-*.ppm
+
